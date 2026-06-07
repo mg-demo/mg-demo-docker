@@ -23,7 +23,6 @@ COPY --from=builder /app .
 
 # Runtime environment variables
 ENV NODE_ENV=production
-ENV API_KEY=DEV-PLACEHOLDER-KEY
 
 EXPOSE 3000
 CMD ["node", "src/server.js"]
