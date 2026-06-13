@@ -1,5 +1,7 @@
 node_modules
 npm-debug.log
+# Runtime env vars must be injected at runtime (e.g., Docker/K8s env or secrets), not baked into the image.
+# Example required ENV: PORT, NODE_ENV, DATABASE_URL
 .env
 .DS_Store
 coverage
