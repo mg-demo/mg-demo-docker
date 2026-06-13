@@ -21,6 +21,10 @@ FROM node:18-alpine
 WORKDIR /app
 COPY --from=builder /app .
 
+# Ensure app files owned by non-root user and drop privileges
+RUN chown -R node:node /app
+USER node
+
 # Runtime environment variables
 ENV NODE_ENV=production
 
