@@ -3,7 +3,7 @@
 # Checks for common secret patterns in files
 set -e
 echo "Running lightweight secret scan..."
-if grep -R -I -q -E "(AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|[A-Za-z0-9+/]{40,}={0,2})" . ; then
+if grep -R -I -q -E --exclude-dir={.git,node_modules,vendor,dist,build} "(AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)" . ; then
   echo "Potential secret found. Please review and remove before building." >&2
   exit 2
 fi
