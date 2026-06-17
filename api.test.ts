@@ -10,6 +10,16 @@ describe('api.ts side-effect fetchUserData', () => {
     await Promise.resolve();
   };
 
+  const runWithMockedFetch = async (fetchMock: jest.Mock, cb: () => Promise<void>) => {
+    const prev = (global as any).fetch;
+    (global as any).fetch = fetchMock;
+    try {
+      await cb();
+    } finally {
+      (global as any).fetch = prev;
+    }
+  };
+
   beforeEach(() => {
     jest.resetModules();
     originalFetch = (global as any).fetch;
@@ -21,8 +31,6 @@ describe('api.ts side-effect fetchUserData', () => {
     (global as any).fetch = originalFetch;
     logSpy.mockRestore();
     errorSpy.mockRestore();
-    jest.clearAllMocks();
-    jest.resetModules();
   });
 
   it('calls fetch and logs expected messages on success', async () => {
@@ -32,19 +40,21 @@ describe('api.ts side-effect fetchUserData', () => {
       company: { name: 'Acme Inc.' },
     };
 
-    (global as any).fetch = jest.fn().mockResolvedValue({
+    const fetchMock = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
       json: jest.fn().mockResolvedValue(mockData),
     });
 
-    await jest.isolateModulesAsync(async () => {
-      await import('./api');
+    await runWithMockedFetch(fetchMock, async () => {
+      await jest.isolateModulesAsync(async () => {
+        await import('./api');
+      });
+      await waitForAsyncTasks();
     });
-    await waitForAsyncTasks();
 
-    expect((global as any).fetch).toHaveBeenCalledTimes(1);
-    expect((global as any).fetch).toHaveBeenCalledWith('https://typicode.com');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith('https://typicode.com');
 
     expect(console.log).toHaveBeenCalledWith('API Integration Successful! Data received:');
     expect(console.log).toHaveBeenCalledWith(`Name: ${mockData.name}`);
@@ -55,16 +65,18 @@ describe('api.ts side-effect fetchUserData', () => {
   });
 
   it('logs an error when response is not ok', async () => {
-    (global as any).fetch = jest.fn().mockResolvedValue({
+    const fetchMock = jest.fn().mockResolvedValue({
       ok: false,
       status: 500,
       json: jest.fn(),
     });
 
-    await jest.isolateModulesAsync(async () => {
-      await import('./api');
+    await runWithMockedFetch(fetchMock, async () => {
+      await jest.isolateModulesAsync(async () => {
+        await import('./api');
+      });
+      await waitForAsyncTasks();
     });
-    await waitForAsyncTasks();
 
     expect(console.error).toHaveBeenCalledWith(
       'Error integrating with the API:',
@@ -74,12 +86,14 @@ describe('api.ts side-effect fetchUserData', () => {
   });
 
   it('logs an error when fetch rejects (network error)', async () => {
-    (global as any).fetch = jest.fn().mockRejectedValue(new Error('Network down'));
+    const fetchMock = jest.fn().mockRejectedValue(new Error('Network down'));
 
-    await jest.isolateModulesAsync(async () => {
-      await import('./api');
+    await runWithMockedFetch(fetchMock, async () => {
+      await jest.isolateModulesAsync(async () => {
+        await import('./api');
+      });
+      await waitForAsyncTasks();
     });
-    await waitForAsyncTasks();
 
     expect(console.error).toHaveBeenCalledWith(
       'Error integrating with the API:',
