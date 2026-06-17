@@ -22,7 +22,7 @@ async function fetchUserData() {
 
   } catch (error) {
     // 5. Catch and handle any network or parsing errors safely
-    console.error('Error integrating with the API:', error.message);
+    console.error('Error integrating with the API');
   }
 }
 
