@@ -1,7 +1,7 @@
 import type {} from 'jest';
 
 describe('api.ts side-effect fetchUserData', () => {
-  const originalConsole = { ...console };
+  const originalFetch = (global as any).fetch;
 
   let logSpy: jest.SpyInstance;
   let errorSpy: jest.SpyInstance;
@@ -19,11 +19,9 @@ describe('api.ts side-effect fetchUserData', () => {
   });
 
   afterEach(() => {
-    (global as any).fetch = undefined;
+    (global as any).fetch = originalFetch;
     logSpy.mockRestore();
     errorSpy.mockRestore();
-    console.log = originalConsole.log;
-    console.error = originalConsole.error;
     jest.clearAllMocks();
   });
 
