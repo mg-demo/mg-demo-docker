@@ -1,5 +1,3 @@
-import type {} from 'jest';
-
 describe('api.ts side-effect fetchUserData', () => {
   const originalFetch = (global as any).fetch;
 
@@ -38,7 +36,9 @@ describe('api.ts side-effect fetchUserData', () => {
       json: jest.fn().mockResolvedValue(mockData),
     });
 
-    await import('./api');
+    await jest.isolateModulesAsync(async () => {
+      await import('./api');
+    });
     await waitForAsyncTasks();
 
     expect((global as any).fetch).toHaveBeenCalledTimes(1);
@@ -59,7 +59,9 @@ describe('api.ts side-effect fetchUserData', () => {
       json: jest.fn(),
     });
 
-    await import('./api');
+    await jest.isolateModulesAsync(async () => {
+      await import('./api');
+    });
     await waitForAsyncTasks();
 
     expect(console.error).toHaveBeenCalledWith(
@@ -72,7 +74,9 @@ describe('api.ts side-effect fetchUserData', () => {
   it('logs an error when fetch rejects (network error)', async () => {
     (global as any).fetch = jest.fn().mockRejectedValue(new Error('Network down'));
 
-    await import('./api');
+    await jest.isolateModulesAsync(async () => {
+      await import('./api');
+    });
     await waitForAsyncTasks();
 
     expect(console.error).toHaveBeenCalledWith(
