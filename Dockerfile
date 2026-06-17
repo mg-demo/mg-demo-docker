@@ -14,7 +14,7 @@ COPY . .
 # Simple security scan step: fail build if common insecure env var is present (demo)
 # This is a lightweight check to surface secrets in environment during build
 # Fix quoting so empty LEAK_SECRET does not trigger a false positive
-RUN if [ -n "$LEAK_SECRET" ]; then echo "LEAK_SECRET must not be set" >&2; exit 1; fi || true
+RUN if [ -n "$LEAK_SECRET" ]; then echo "LEAK_SECRET must not be set" >&2; exit 1; fi
 
 # Build final image
 FROM node:18-alpine
