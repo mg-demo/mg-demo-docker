@@ -12,13 +12,29 @@ async function fetchUserData() {
     }
 
     // 3. Parse the incoming stream data into a JSON object
-    const data =  await response.json();
+    const data: unknown =  await response.json();
     
     // 4. Log the output data to the console
     console.log('API Integration Successful! Data received:');
-    console.log(`Name: ${data.name}`);
-    console.log(`Email: ${data.email}`);
-    console.log(`Company: ${data.company.name}`);
+    let name = 'N/A';
+    let email = 'N/A';
+    let companyName = 'N/A';
+    if (data && typeof data === 'object') {
+      const d = data as Record<string, unknown>;
+      if (typeof d.name === 'string') {
+        name = d.name;
+      }
+      if (typeof d.email === 'string') {
+        email = d.email;
+      }
+      const company = d.company && typeof d.company === 'object' ? d.company as Record<string, unknown> : undefined;
+      if (company && typeof company.name === 'string') {
+        companyName = company.name;
+      }
+    }
+    console.log(`Name: ${name}`);
+    console.log(`Email: ${email}`);
+    console.log(`Company: ${companyName}`);
 
   } catch (error) {
     // 5. Catch and handle any network or parsing errors safely
@@ -28,4 +44,3 @@ async function fetchUserData() {
 }
 
 // Execute the API integration function
-fetchUserData();
