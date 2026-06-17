@@ -1,5 +1,5 @@
 describe('api.ts side-effect fetchUserData', () => {
-  const originalFetch = (global as any).fetch;
+  let originalFetch: any;
 
   let logSpy: jest.SpyInstance;
   let errorSpy: jest.SpyInstance;
@@ -12,6 +12,7 @@ describe('api.ts side-effect fetchUserData', () => {
 
   beforeEach(() => {
     jest.resetModules();
+    originalFetch = (global as any).fetch;
     logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -21,6 +22,7 @@ describe('api.ts side-effect fetchUserData', () => {
     logSpy.mockRestore();
     errorSpy.mockRestore();
     jest.clearAllMocks();
+    jest.resetModules();
   });
 
   it('calls fetch and logs expected messages on success', async () => {
