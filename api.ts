@@ -22,7 +22,8 @@ async function fetchUserData() {
 
   } catch (error) {
     // 5. Catch and handle any network or parsing errors safely
-    console.error('Error integrating with the API');
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`Error integrating with the API: ${message}`);
   }
 }
 
