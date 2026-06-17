@@ -4,7 +4,7 @@ async function fetchUserData() {
 
   try {
     // 1. Make the HTTP GET request
-    const response = await fetch(url);
+    const response =  fetch(url);
 
     // 2. Check if the response status is OK (status code 200-299)
     if (!response.ok) {
@@ -12,7 +12,7 @@ async function fetchUserData() {
     }
 
     // 3. Parse the incoming stream data into a JSON object
-    const data = await response.json();
+    const data =  response.json();
     
     // 4. Log the output data to the console
     console.log('API Integration Successful! Data received:');
