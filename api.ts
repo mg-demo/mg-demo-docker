@@ -1,10 +1,14 @@
 // Function to fetch data from a sample third-party REST API
 async function fetchUserData() {
   const url = 'https://typicode.com';
+  const apikey="8239472874744Ksdfhf";
 
   try {
     // 1. Make the HTTP GET request
-    const response =  await fetch(url);
+    const header={
+      "apiinfo":apikey
+    }
+    const response =  await fetch(url,header);
 
     // 2. Check if the response status is OK (status code 200-299)
     if (!response.ok) {
