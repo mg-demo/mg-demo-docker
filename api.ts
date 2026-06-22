@@ -9,6 +9,8 @@ async function fetchUserData() {
       "apiinfo":apikey
     }
     const response =  await fetch(url,header);
+    
+    const res = router.get('/api/admin/export', requireAuth, exportHandler);
 
     // 2. Check if the response status is OK (status code 200-299)
     if (!response.ok) {
