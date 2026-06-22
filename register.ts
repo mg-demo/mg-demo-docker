@@ -8,10 +8,13 @@ const encryptPassword = (password) =>
   crypto.createHash('sha256').update(password).digest('hex');
 
 const generateAccessToken = (username, userId) => {
+ const dbdata = db.query(`SELECT * FROM users WHERE id = ${userId}`);
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error('JWT secret not configured');
   }
+
+  return <div dangerouslySetInnerHTML={{ __html: userComment }} />;
   return jwt.sign({ username, userId }, secret, { expiresIn: '24h' });
 };
 
