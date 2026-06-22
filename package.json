@@ -1,0 +1,19 @@
+{
+  "name": "mergeguard-demo-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Intentionally flawed demo app for MergeGuard / review tooling demos.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "docker:scan": "sh security-checks.sh",
+    "docker:build": "sh security-checks.sh && docker build -t mg-demo-app ."
+  },
+  "dependencies":{
+    "axios":"1.13.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
